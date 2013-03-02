@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+  <title>URL shortener</title>
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="libs/gh-buttons/gh-buttons.css">
+<style type="text/css">
+    body {
+      font-family: sans-serif;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    input[type='text'],
+    input[type='submit'] {
+      font-size: 16px;
+      padding: 4px 8px;
+    }
+    a, a:visited {
+      color: #2A62C2;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+    pre {
+      overflow: auto;
+    }
+    
+    .section {
+      margin-bottom: 2rem;
+    }
+    
+    .row {
+      margin-bottom: 1rem;
+    }
+    
+    .hide {
+      display: none;
+    }
+    
+    pre {
+      background-color: #F5F5F5;
+      border: 1px solid #EBEBEB;
+      padding: 5px;
+    }
+    code {
+      font: 1em "Droid Sans Mono",monospace;
+      color: #007000;
+    }
+    
+    .divider {
+      margin: 2em 0;
+      border-bottom: 1px #ccc solid;
+    }
+    .alignright { float: right; }
+    .alignleft { float: left; }
+       
+    
+    .footer,
+    .footer a {
+      color: #808080;
+    }
+    
+    #page {
+      text-align: center;
+      max-width: 600px;
+      min-width: 400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+        
+        
+    #longurl {
+      width: 290px;
+    }        
+    
+    #shorturl {     
+      background-color: #F7F7F7;
+      border: 1px solid #ECECEC;
+      text-align: center;
+      color: #2A62C2;
+      font-size: 20px;
+      font-weight: bold;
+      height: 40px;
+      width: 300px;
+    }
+    
+    #msg {
+      font-weight: bold;
+    }
+    
+    #api {
+      text-align: left;
+    }
+    
+.tabs { margin: 0; padding: 0; margin-bottom: ; }
+.tab { display: inline-block; zoom:1; *display:inline; }
+.tab a.active { font-weight: bold; }
+.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+
+
+    
+</style>
+</html>
+<body>
+<div id="page">    
+
+  <div class="header section">
+    <h1>URL Shortener</h1> 
+  </div>
+  
+  <div class="content section tab-container" id="tab-container">  
+    <ul class='tabs'>
+      <li class='tab'><a href="#shorten" class="button">URL Shortener</a></li>
+      <li class='tab'><a href="#api" class="button">API</a></li>
+    </ul>
+    
+    <div class="divider"></div>
+    
+    <div id="shorten">
+      <form method="post" action="api.php" id="shortener">
+        <div class="row">
+          <input type="text" name="url" id="longurl" placeholder="URL to shorten"> <input type="submit" value="Shorten" class="button">
+        </div>      
+        <div id="msg" class="row box hide"></div>
+        <div id="response" class="row hide">    
+          <div class="row"><input type="text" id="shorturl" readonly="readonly" onclick="this.select();"/></div>
+          <div class="row"><span id="qrcode"></span></div>
+          <div class="row"><a target="_blank" id="shorturlLink"></a></div>      
+        </div>
+      </form> 
+    </div>
+  
+    <div id="api" class="hide">
+      <h2>API</h2>
+      <pre>http://s.my-azur.de/api.php?parameters</pre>
+      
+      <h3>Anfrageparameter</h3>
+      
+      <ul>
+        <li><code>url</code>: (erforderlich) Die zu k&uuml;rzende URL beginnend mit http://, https:// oder ftp://</li>
+        <li><code>format</code>: (optional)
+          <ul>
+            <li><code>plain</code> (default) gibt an, dass die Ausgabe als Plain Text erfolgen soll. Es wird nur die URL oder ein Fehlertext ausgegeben.</li>
+            <li><code>json</code> (empfohlen) gibt an, dass die Ausgabe als JSON (JavaScript Object Notation) erfolgen soll. Es werden <code>status(true)</code>, <code>longurl</code>, <code>shortid</code>, <code>shorturl</code> oder im Fehlerfall <code>status(false)</code>, <code>longurl</code> und <code>text</code></li>
+          </ul>
+        </li>
+      </ul>
+      
+      
+      <h3>Beispiel PHP</h3>
+      <pre>$shortenedurl = file_get_contents('http://s.my-azur.de/api.php?url=http://google.de/');</pre>
+      
+      <h3>Beispiel Javascript</h3>
+      <pre>$.getJSON('http://s.my-azur.de/api.php?callback=?', {
+  url: 'http://google.de/',
+  format: 'json'
+}, function(res) {
+  if(res.status === true) {
+    console.log(res.shorturl);
+  }
+});</pre>
+    </div>
+    
+  </div>
+  
+  <div class="footer section">
+    <div class="divider"></div>
+      <a href="http://my-azur.de" target="_blank">my-azur.de</a> // <a href="https://github.com/sinky/PHP-URL-Shortener" target="_blank">fork me</a> // <a href="javascript:(function() { var u='http://s.my-azur.de/?url='+encodeURIComponent(location.href);w=open(u,'');w.focus(); })();" title="URL K&uuml;rzen">Bookmarklet</a>
+  </div>
+       
+</div>
+
+
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>window.jQuery || document.write(unescape('%3Cscript src="libs/jquery/jquery.min.js?ver=1.7.2"%3E%3C/script%3E'))</script>
+<script type="text/javascript" src="libs/jquery/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="libs/jquery/jquery.easytabs.min.js"></script>
+<script type="text/javascript" src="libs/jquery/jquery.qrcode-0.2.min.js"></script>
+
+<script type="text/javascript">
+$(function () {
+  $('#tab-container').easytabs();
+  
+  // beim Laden der Seite Cursor in Textfeld 
+  $('#longurl').focus();
+   
+  if(getparam('url') != undefined) {
+    $('#longurl').val(getparam('url'));  
+    getShortUrl();
+  }
+      
+	$('#shortener').submit(function () { // Wenn Formular abgesendet wird
+    $('#response, #msg').hide(); // evtl. sichtbare Meldungen und shortlinks verstecken
+    getShortUrl();
+    return false;
+	}); // END: submit
+});
+function getShortUrl() {
+  $.getJSON('api.php', {
+    url: $('#longurl').val(),
+    format: 'json'
+  }, function(res) {
+    if(res.status === true) {
+  
+      var shorturl = res.shorturl;
+      $('#response').show(); // HTML Abschnitt anzeigen
+  
+      $('#shorturl').val(shorturl).focus().select(); // shortlink im Textfeld einfügen, focus geben und text markieren für schnelles copy&paste
+      $('#shorturlLink').attr('href', shorturl).text(shorturl); // klickbaren Link erstellen
+  
+      // QRcode
+      $('#qrcode').html(''); //vorherigen löschen
+      $('#qrcode').qrcode({ // neuen erstellen
+        width: 100,
+        height: 100,
+        color: '#000',
+        text: shorturl
+      });
+  
+    }else{
+      $('#msg').show().text( res.text );
+    }
+  });
+}
+
+
+(function(){
+    var s = window.location.search.substring(1).split('&');
+    if(!s.length) return;
+    var c = {};
+    for(var i  = 0; i < s.length; i++)  {
+        var parts = s[i].split('=');
+        c[unescape(parts[0])] = unescape(parts[1]);
+    }
+    window.getparam = function(name){return name ? c[name] : c;}
+}())
+
+</script>
+</body>
+</html>
