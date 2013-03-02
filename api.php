@@ -4,6 +4,8 @@ require_once('alphaID.inc.php');
 
 $longURL = mysql_real_escape_string(trim($_REQUEST['url'])); // http://google.de
 $returnFormat = mysql_real_escape_string(trim($_REQUEST['format'])); // json, plain
+$callback = $_REQUEST['callback']; // calback for json
+
 
 $result->status = true;
 $result->longurl = $longURL;
@@ -56,8 +58,13 @@ function createShortURL($longURL) {
 * @param {String} Output Format plain or json
 */
 function returnData($result, $returnFormat) {
+  global $callback;
   if($returnFormat == "json"){
-    echo json_encode($result);
+    if(!empty($callback)){
+      echo $callback."(".json_encode($result).")";
+    }else{
+      echo json_encode($result);
+    }    
   }else{
     echo $result->shorturl;
   }
@@ -69,8 +76,13 @@ function returnData($result, $returnFormat) {
 * @param {String} Output Format plain or json
 */
 function returnError($error, $returnFormat) {
+  global $callback;
   if($returnFormat == "json"){
-    echo json_encode($error);
+    if(!empty($callback)){
+      echo $callback."(".json_encode($error).")";  
+    }else{
+      echo json_encode($error);
+    }
   }else{
     echo $error->text;
   }
